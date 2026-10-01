@@ -1,0 +1,92 @@
+*lsp-control-panel.txt*    Comprehensive LSP Control Panel for Neovim
+
+==============================================================================
+CONTENTS                                               *lsp-control-panel-contents*
+
+    1. Introduction .............................. |lsp-control-panel-intro|
+    2. Requirements .............................. |lsp-control-panel-requirements|
+    3. Installation .............................. |lsp-control-panel-install|
+    4. Commands .................................. |lsp-control-panel-commands|
+    5. Lua API ................................... |lsp-control-panel-api|
+    6. Configuration ............................. |lsp-control-panel-config|
+
+==============================================================================
+1. INTRODUCTION                                       *lsp-control-panel-intro*
+
+lsp-control-panel.nvim provides an interactive control panel for Neovim LSP
+clients and buffer actions.
+
+It provides an interactive UI to:
+- Inspect running LSP servers, attached buffers, and server capabilities.
+- Restart, stop, attach, or detach individual or all LSP clients.
+- View real-time previews of LSP logs and server status.
+- Toggle LSP Inlay Hints, Code Lens, Semantic Tokens, and Diagnostics.
+- Execute code actions, formatting, rename, symbol searches, and call hierarchies.
+- Manage workspace folders and client root directories.
+- Fully controllable using keyboard navigation, search filtering, and mouse.
+
+==============================================================================
+2. REQUIREMENTS                                *lsp-control-panel-requirements*
+
+- Neovim >= 0.10.0
+- Optional UI backends:
+  - folke/snacks.nvim (recommended for picker UI and live markdown previews)
+  - fallback to `vim.ui.select` if Snacks is not installed
+
+==============================================================================
+3. INSTALLATION                                    *lsp-control-panel-install*
+
+Using lazy.nvim: >lua
+    {
+      "lsp-control-panel.nvim",
+      cmd = "LspControlPanel",
+      keys = {
+        { "<leader>cp", "<cmd>LspControlPanel<cr>", desc = "LSP Control Panel" },
+      },
+      opts = {},
+    }
+<
+
+==============================================================================
+4. COMMANDS                                        *lsp-control-panel-commands*
+
+:LspControlPanel [subcommand]                     *:LspControlPanel*
+
+Subcommands:
+    open               Open the main LSP Control Panel (default).
+    [client_name]      Open dedicated control panel for the specified client.
+    restart [client]   Restart all clients or the specified client.
+    stop [client]      Stop all clients or the specified client.
+    log                View LSP log file in a split.
+    clear-log          Clear/truncate LSP log file.
+    inlay-hints        Toggle LSP inlay hints on current buffer.
+    diagnostics        Toggle diagnostics display.
+    health             Run :checkhealth vim.lsp.
+    mason              Open Mason package manager.
+
+==============================================================================
+5. LUA API                                             *lsp-control-panel-api*
+
+>lua
+    local lcp = require("lsp_control_panel")
+    lcp.setup({ backend = "auto" })
+    lcp.open()
+    lcp.open({ client = "lua_ls" })
+<
+
+Use Neovim's `vim.lsp` and `vim.diagnostic` APIs for direct LSP operations.
+
+==============================================================================
+6. CONFIGURATION                                    *lsp-control-panel-config*
+
+Default options: >lua
+    require("lsp_control_panel").setup({
+      backend = "auto", -- "auto"|"snacks"|"builtin"
+      preview = true,   -- show live preview pane
+      log_preview_lines = 40,
+      extra_actions = {},
+    })
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
